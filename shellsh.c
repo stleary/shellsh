@@ -197,10 +197,11 @@ int main(){
                 //     continue;
                 // }
                 int result = dup2(out, 1);
-                if (result = -1) {
+                if (result == -1) {
                     perror("error in dup2()\n");
-                    continue;
+                    exit(-1);
                 }
+                args[writeToIndex] = 0;
             }
 
             execvp(args[0], args);
@@ -217,11 +218,11 @@ int main(){
                 status = WEXITSTATUS(child);
                 printf("in parent: exit value %d\n",status);
             }
-            if (out > 0) {
-                close(out);
-                dup2(savestdout, 1);
-                close(savestdout);
-            }
+            // if (out > 0) {
+            //     close(out);
+            //     dup2(savestdout, 1);
+            //     close(savestdout);
+            // }
             //status = WEXITSTATUS(status);       
             //printf("exit value %d\n",exit_status);
         }
