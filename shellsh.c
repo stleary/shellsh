@@ -122,25 +122,10 @@ int main(){
                 //printf("other ok\n");
             }
         }
+
+
+
         int out, savestdout = 0;
-        if (writeTo == 1) {
-            out = open(args[writeToIndex+1], O_WRONLY | O_CREAT | O_TRUNC, 0640);
-            int savestdout = dup(1);
-            printf("%s\t%d\n", args[writeToIndex+1],out);
-            // TODO: what if command is miswritten?
-            if (out == -1) {
-                perror("error  in open()\n");
-                continue;
-            }
-            // int result = dup2(out, 1);
-            // if (result = -1) {
-            //     perror("error in dup2()\n");
-            //     continue;
-            // }
-        }
-
-
-
 
         // spawn a child to run exec function
         int child;
@@ -188,6 +173,23 @@ int main(){
             //     }
             // }
 
+
+            if (writeTo == 1) {
+                out = open(args[writeToIndex+1], O_WRONLY | O_CREAT | O_TRUNC, 0640);
+                int savestdout = dup(1);
+                printf("%s\t%d\n", args[writeToIndex+1],out);
+                // TODO: what if command is miswritten?
+                if (out == -1) {
+                    perror("error  in open()\n");
+                    exit(1);
+                }
+                // int result = dup2(out, 1);
+                // if (result = -1) {
+                //     perror("error in dup2()\n");
+                //     continue;
+                // }
+            }
+
             if (writeTo == 1) {
                 //int out = open(args[writeToIndex+1], O_WRONLY | O_CREAT | O_TRUNC, 0640);
                 //printf("%s\t%d\n", args[writeToIndex+1],out);
@@ -218,6 +220,8 @@ int main(){
                 status = WEXITSTATUS(child);
                 printf("in parent: exit value %d\n",status);
             }
+            writeTo = 0;
+            writeFrom = 0;
             // if (out > 0) {
             //     close(out);
             //     dup2(savestdout, 1);
